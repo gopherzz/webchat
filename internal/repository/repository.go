@@ -8,6 +8,7 @@ import (
 
 type Messages interface {
 	Save(message *models.Message) error
+	GetAll() ([]*models.Message, error)
 }
 
 type Repository struct {

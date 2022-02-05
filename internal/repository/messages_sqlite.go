@@ -22,3 +22,30 @@ func (m *MessagesSqlite) Save(message *models.Message) error {
 
 	return nil
 }
+
+func (m *MessagesSqlite) GetAll() ([]*models.Message, error) {
+	rows, err := m.db.Query("SELECT * FROM messages")
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	messages := make([]*models.Message, 0)
+	for rows.Next() {
+		var id, senderId string
+		var data []byte
+		err = rows.Scan(&id, &senderId, &data)
+		if err != nil {
+			return nil, err
+		}
+
+		messages = append(messages, &models.Message{
+			Id:       id,
+			SenderId: senderId,
+			Data:     data,
+		})
+	}
+
+	return messages, nil
+}

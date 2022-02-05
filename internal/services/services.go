@@ -1,9 +1,13 @@
 package services
 
-import repo "github.com/gopherzz/webchat/internal/repository"
+import (
+	"github.com/gopherzz/webchat/internal/models"
+	repo "github.com/gopherzz/webchat/internal/repository"
+)
 
 type Messages interface {
 	Save(message []byte, clientId string) error
+	GetAll() ([]*models.Message, error)
 }
 
 type Services struct {

@@ -28,3 +28,7 @@ func createMessage(message []byte, clientId string) *models.Message {
 		Data:     message,
 	}
 }
+
+func (ms *MessagesService) GetAll() ([]*models.Message, error) {
+	return ms.repo.GetAll()
+}

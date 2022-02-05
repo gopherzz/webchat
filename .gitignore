@@ -1,0 +1,3 @@
+bin
+db/webchat.db
+.env

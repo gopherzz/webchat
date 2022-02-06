@@ -1,12 +1,13 @@
 package models
 
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
+
 type Message struct {
-	// Id is uuid string
-	Id string `db:"id"`
-
-	// SenderId is uuid string
-	SenderId string `db:"sender_id"`
-
-	// Data is message data
-	Data []byte `db:"data"`
+	ID       uuid.UUID `json:"id"`
+	CreateAt time.Time `json:"created_at"`
+	Body     string    `json:"body"`
 }

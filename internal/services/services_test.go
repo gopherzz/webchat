@@ -11,21 +11,21 @@ func TestServices(t *testing.T) {
 	services := NewServices(repo)
 
 	data := []struct {
-		message  []byte
+		message  string
 		clientId string
 	}{
 		{
-			message:  []byte("Hello, World!"),
+			message:  "Hello, World",
 			clientId: "client-id",
 		},
 		{
-			message:  []byte("Hello, World 2!"),
+			message:  "Hello, World 2!",
 			clientId: "client2-id",
 		},
 	}
 
 	for _, d := range data {
-		if err := services.Save(d.message, d.clientId); err != nil {
+		if err := services.Save(d.message); err != nil {
 			t.Error(err)
 		}
 	}
@@ -37,11 +37,5 @@ func TestServices(t *testing.T) {
 
 	if len(msgs) != 2 {
 		t.Errorf("Expected 2 messages, got %d", len(msgs))
-	}
-
-	for i, m := range msgs {
-		if m.SenderId != data[i].clientId {
-			t.Errorf("Expected %s, got %s", data[i].clientId, m.SenderId)
-		}
 	}
 }

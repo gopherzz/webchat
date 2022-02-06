@@ -1,4 +1,4 @@
 bin
-db/webchat.db
+db
 .env
 go.sum

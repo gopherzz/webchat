@@ -6,7 +6,7 @@ import (
 )
 
 type Messages interface {
-	Save(message []byte, clientId string) error
+	Save(message string) error
 	GetAll() ([]*models.Message, error)
 }
 

@@ -5,25 +5,20 @@ import (
 )
 
 type MemoryMessages struct {
-	db map[string]*models.Message
+	db []*models.Message
 }
 
 func NewMemoryMessages() *MemoryMessages {
 	return &MemoryMessages{
-		db: make(map[string]*models.Message),
+		db: make([]*models.Message, 0),
 	}
 }
 
 func (m *MemoryMessages) Save(message *models.Message) error {
-	m.db[message.Id] = message
+	m.db = append(m.db, message)
 	return nil
 }
 
 func (m *MemoryMessages) GetAll() ([]*models.Message, error) {
-	messages := make([]*models.Message, 0)
-	for _, message := range m.db {
-		messages = append(messages, message)
-	}
-
-	return messages, nil
+	return m.db, nil
 }

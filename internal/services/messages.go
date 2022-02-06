@@ -1,6 +1,8 @@
 package services
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/gopherzz/webchat/internal/models"
 	repo "github.com/gopherzz/webchat/internal/repository"
@@ -16,16 +18,16 @@ func NewMessages(repo *repo.Repository) *MessagesService {
 	}
 }
 
-func (ms *MessagesService) Save(message []byte, clientId string) error {
-	msg := createMessage(message, clientId)
+func (ms *MessagesService) Save(message string) error {
+	msg := createMessage(message)
 	return ms.repo.Save(msg)
 }
 
-func createMessage(message []byte, clientId string) *models.Message {
+func createMessage(message string) *models.Message {
 	return &models.Message{
-		Id:       uuid.New().String(),
-		SenderId: clientId,
-		Data:     message,
+		ID:       uuid.New(),
+		CreateAt: time.Now(),
+		Body:     message,
 	}
 }
 

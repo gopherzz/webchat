@@ -1,15 +1,18 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 
-	repo "github.com/gopherzz/webchat/internal/repository"
+	"github.com/gopherzz/cucumberdb"
+	"github.com/gopherzz/webchat/internal/repository"
 	"github.com/gopherzz/webchat/internal/services"
 	"github.com/gopherzz/webchat/internal/webchat"
+	"github.com/joho/godotenv"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
@@ -26,21 +29,26 @@ func getEnv(name, def string) string {
 }
 
 func run() error {
-	port := fmt.Sprintf(":%s", getEnv("PORT", "8080"))
-	databasePath := getEnv("DATABASE_PATH", "webchat.db")
-
-	db, err := sql.Open("sqlite3", databasePath)
-	if err != nil {
+	if err := godotenv.Load(); err != nil {
 		return err
 	}
 
-	repo := repo.NewRepository(db)
+	port := fmt.Sprintf(":%s", getEnv("PORT", "8080"))
+	databasePath := getEnv("DATABASE_PATH", "webchat.db")
+
+	db := cucumberdb.New()
+	if err := db.Load(databasePath); err != nil {
+		return err
+	}
+
+	repo := repository.NewRepository(db)
 	services := services.NewServices(repo)
 
-	hub := webchat.NewHub(services)
-	go hub.Run()
+	poll := webchat.NewPoll(services)
+	go poll.Run()
 
-	http.HandleFunc("/", webchat.WebSocketHandler(hub))
+	http.HandleFunc("/messages", poll.GetMessages)
+	http.HandleFunc("/send", poll.SendMessage)
 
 	log.Printf("listening on %s", port)
 	return http.ListenAndServe(port, nil)

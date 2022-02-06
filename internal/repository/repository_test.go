@@ -11,14 +11,10 @@ func TestRepository_Save(t *testing.T) {
 
 	data := []*models.Message{
 		{
-			Id:       "1",
-			SenderId: "1",
-			Data:     []byte("Hello, World!"),
+			Body: "Hello, World!",
 		},
 		{
-			Id:       "2",
-			SenderId: "2",
-			Data:     []byte("Hello, World 2!"),
+			Body: "Hello, World 2!",
 		},
 	}
 
@@ -36,12 +32,6 @@ func TestRepository_Save(t *testing.T) {
 	if len(l) != 2 {
 		t.Errorf("Expected 2 messages, got %d", len(l))
 	}
-
-	for i, m := range l {
-		if m.SenderId != data[i].SenderId {
-			t.Errorf("Expected %s, got %s", data[i].SenderId, m.SenderId)
-		}
-	}
 }
 
 func TestRepository_GetAll(t *testing.T) {
@@ -49,14 +39,10 @@ func TestRepository_GetAll(t *testing.T) {
 
 	data := []*models.Message{
 		{
-			Id:       "1",
-			SenderId: "1",
-			Data:     []byte("Hello, World!"),
+			Body: "Hello, World",
 		},
 		{
-			Id:       "2",
-			SenderId: "2",
-			Data:     []byte("Hello, World 2!"),
+			Body: "Hello, World 2!",
 		},
 	}
 
@@ -80,9 +66,7 @@ func TestRepository_GetAll(t *testing.T) {
 		t.Error(err)
 	}
 
-	for i, m := range msgs {
-		if m.SenderId != data[i].SenderId {
-			t.Errorf("Expected %s, got %s", data[i].SenderId, m.SenderId)
-		}
+	if len(msgs) != 2 {
+		t.Errorf("Expected 2 messages, got %d", len(msgs))
 	}
 }

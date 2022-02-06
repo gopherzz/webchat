@@ -1,8 +1,7 @@
 package repository
 
 import (
-	"database/sql"
-
+	"github.com/gopherzz/cucumberdb"
 	"github.com/gopherzz/webchat/internal/models"
 )
 
@@ -15,7 +14,7 @@ type Repository struct {
 	Messages
 }
 
-func NewRepository(db *sql.DB) *Repository {
+func NewRepository(db *cucumberdb.Db) *Repository {
 	return &Repository{
 		Messages: NewMessages(db),
 	}
